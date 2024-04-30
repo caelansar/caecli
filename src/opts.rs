@@ -25,7 +25,7 @@ pub struct CsvOpts {
     #[arg(short, long, value_parser = verify_input_file)]
     pub input: String,
 
-    #[arg(short, long, default_value = "output.json")]
+    #[arg(short, long)]
     pub output: Option<String>,
 
     #[arg(long, value_parser = parse_format, default_value = "json")]
