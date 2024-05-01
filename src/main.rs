@@ -1,4 +1,4 @@
-use caecli::{process_csv, Opts, SubCommand};
+use caecli::{process_csv, process_genpass, Opts, SubCommand};
 use clap::Parser;
 
 fn main() -> anyhow::Result<()> {
@@ -11,6 +11,15 @@ fn main() -> anyhow::Result<()> {
                 format!("output.{}", opts.format)
             };
             process_csv(&opts.input, output, opts.format)?;
+        }
+        SubCommand::GenPass(opts) => {
+            process_genpass(
+                opts.length,
+                opts.uppercase,
+                opts.lowercase,
+                opts.number,
+                opts.symbol,
+            )?;
         }
     }
 
