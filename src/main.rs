@@ -1,4 +1,7 @@
-use caecli::{process_csv, process_genpass, Opts, SubCommand};
+use caecli::{
+    process_csv, process_decode, process_encode, process_genpass, Base64SubCommand, Opts,
+    SubCommand,
+};
 use clap::Parser;
 
 fn main() -> anyhow::Result<()> {
@@ -21,6 +24,14 @@ fn main() -> anyhow::Result<()> {
                 opts.symbol,
             )?;
         }
+        SubCommand::Base64(opts) => match opts {
+            Base64SubCommand::Encode(opts) => {
+                process_encode(&opts.input, opts.format)?;
+            }
+            Base64SubCommand::Decode(opts) => {
+                process_decode(&opts.input, opts.format)?;
+            }
+        },
     }
 
     Ok(())
