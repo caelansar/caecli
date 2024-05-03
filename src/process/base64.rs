@@ -42,11 +42,25 @@ fn _process_decode(mut reader: impl Read, format: Base64Format) -> Result<String
     Ok(decoded)
 }
 
-fn get_reader(input: &str) -> Result<Box<dyn Read>> {
-    let reader: Box<dyn Read> = if input == "-" {
-        Box::new(std::io::stdin())
+enum Reader {
+    Stdin(std::io::Stdin),
+    File(std::fs::File),
+}
+
+impl Read for Reader {
+    fn read(&mut self, buf: &mut [u8]) -> std::io::Result<usize> {
+        match self {
+            Self::Stdin(stdin) => stdin.read(buf),
+            Self::File(file) => file.read(buf),
+        }
+    }
+}
+
+fn get_reader(input: &str) -> Result<Reader> {
+    let reader = if input == "-" {
+        Reader::Stdin(std::io::stdin())
     } else {
-        Box::new(File::open(input)?)
+        Reader::File(File::open(input)?)
     };
     Ok(reader)
 }
