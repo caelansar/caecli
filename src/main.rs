@@ -26,10 +26,12 @@ fn main() -> anyhow::Result<()> {
         }
         SubCommand::Base64(opts) => match opts {
             Base64SubCommand::Encode(opts) => {
-                process_encode(&opts.input, opts.format)?;
+                let encoded = process_encode(&opts.input, opts.format)?;
+                println!("{}", encoded);
             }
             Base64SubCommand::Decode(opts) => {
-                process_decode(&opts.input, opts.format)?;
+                let decoded = process_decode(&opts.input, opts.format)?;
+                println!("{}", decoded);
             }
         },
     }
