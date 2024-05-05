@@ -2,6 +2,7 @@ mod base64;
 mod csv;
 mod gen_pass;
 mod text;
+mod time;
 
 use clap::Parser;
 use std::path::{Path, PathBuf};
@@ -12,6 +13,7 @@ pub use self::{
     gen_pass::GenPassOpts,
     text::TextSignFormat,
     text::TextSubCommand,
+    time::{Time, TimeOpts, TimeUnit},
 };
 
 #[derive(Debug, Parser)]
@@ -31,6 +33,8 @@ pub enum SubCommand {
     Base64(Base64SubCommand),
     #[command(subcommand, about = "Text sign/verify")]
     Text(TextSubCommand),
+    #[command(name = "time", about = "Timestamp convert")]
+    Time(TimeOpts),
 }
 
 fn verify_input_file(filename: &str) -> Result<String, &'static str> {

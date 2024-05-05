@@ -2,6 +2,7 @@ mod base64;
 mod csv_convert;
 mod gen_pass;
 mod text;
+mod time;
 
 use std::io::Read;
 
@@ -11,6 +12,7 @@ pub use base64::{process_decode, process_encode};
 pub use csv_convert::process_csv;
 pub use gen_pass::process_genpass;
 pub use text::*;
+pub use time::process_time;
 
 pub enum Reader {
     Stdin(std::io::Stdin),
