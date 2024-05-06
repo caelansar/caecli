@@ -1,4 +1,5 @@
 use clap::Parser;
+use itertools::Itertools;
 
 #[derive(Debug, Parser)]
 pub struct TimeOpts {
@@ -20,13 +21,14 @@ pub struct Time {
 }
 
 fn verify_timestamp(ts: &str) -> anyhow::Result<Time> {
-    let timestamp = ts.chars().take_while(|x| x.is_numeric());
+    let mut chars = ts.chars();
+    let timestamp = chars.take_while_ref(|x| x.is_numeric());
     let timestamp = timestamp.collect::<String>();
 
-    let unit = match ts.strip_prefix(&timestamp) {
-        Some("s") => TimeUnit::Seconds,
-        Some("ms") => TimeUnit::Milliseconds,
-        _ => anyhow::bail!("invalid time unit"),
+    let unit = match chars.as_str() {
+        "s" => TimeUnit::Seconds,
+        "ms" => TimeUnit::Milliseconds,
+        s => anyhow::bail!("invalid time unit `{}`", s),
     };
 
     let timestamp: u64 = timestamp.parse()?;
