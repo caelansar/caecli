@@ -1,6 +1,7 @@
 mod base64;
 mod csv;
 mod gen_pass;
+mod http;
 mod text;
 mod time;
 
@@ -11,8 +12,8 @@ pub use self::{
     base64::{Base64Format, Base64SubCommand},
     csv::{CsvOpts, OutputFormat},
     gen_pass::GenPassOpts,
-    text::TextSignFormat,
-    text::TextSubCommand,
+    http::HttpSubCommand,
+    text::{TextSignFormat, TextSubCommand},
     time::{Time, TimeOpts, TimeUnit},
 };
 
@@ -35,6 +36,8 @@ pub enum SubCommand {
     Text(TextSubCommand),
     #[command(name = "time", about = "Timestamp convert")]
     Time(TimeOpts),
+    #[command(subcommand, about = "HTTP static server")]
+    Http(HttpSubCommand),
 }
 
 fn verify_input_file(filename: &str) -> Result<String, &'static str> {

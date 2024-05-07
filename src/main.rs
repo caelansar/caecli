@@ -2,13 +2,14 @@ use std::{fs, io::Read};
 
 use base64::{engine::general_purpose::URL_SAFE_NO_PAD, Engine as _};
 use caecli::{
-    get_reader, process_csv, process_decode, process_encode, process_genpass,
+    get_reader, process_csv, process_decode, process_encode, process_genpass, process_http_serve,
     process_text_key_generate, process_text_sign, process_text_verify, process_time,
-    Base64SubCommand, Opts, SubCommand, TextSubCommand,
+    Base64SubCommand, HttpSubCommand, Opts, SubCommand, TextSubCommand,
 };
 use clap::Parser;
 
-fn main() -> anyhow::Result<()> {
+#[tokio::main]
+async fn main() -> anyhow::Result<()> {
     let opts = Opts::parse();
     match opts.cmd {
         SubCommand::Csv(opts) => {
@@ -67,6 +68,11 @@ fn main() -> anyhow::Result<()> {
             }
         },
         SubCommand::Time(opts) => process_time(opts.timestamp)?,
+        SubCommand::Http(cmd) => match cmd {
+            HttpSubCommand::Serve(opts) => {
+                process_http_serve(opts.dir, opts.port).await?;
+            }
+        },
     }
 
     Ok(())
