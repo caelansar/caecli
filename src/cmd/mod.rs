@@ -6,14 +6,15 @@ mod text;
 mod time;
 
 use clap::Parser;
+use enum_dispatch::enum_dispatch;
 use std::path::{Path, PathBuf};
 
 pub use self::{
-    base64::{Base64Format, Base64SubCommand},
+    base64::{Base64DecodeOpts, Base64EncodeOpts, Base64Format, Base64SubCommand},
     csv::{CsvOpts, OutputFormat},
     gen_pass::GenPassOpts,
-    http::HttpSubCommand,
-    text::{TextSignFormat, TextSubCommand},
+    http::{HttpServeOpts, HttpSubCommand},
+    text::{KeyGenerateOpts, TextSignFormat, TextSignOpts, TextSubCommand, TextVerifyOpts},
     time::{Time, TimeOpts, TimeUnit},
 };
 
@@ -25,6 +26,7 @@ pub struct Opts {
 }
 
 #[derive(Debug, Parser)]
+#[enum_dispatch(CmdExector)]
 pub enum SubCommand {
     #[command(name = "csv", about = "Show CSV, or convert CSV to other formats")]
     Csv(CsvOpts),

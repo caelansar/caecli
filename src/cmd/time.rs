@@ -1,11 +1,20 @@
 use clap::Parser;
 use itertools::Itertools;
 
+use crate::CmdExector;
+
 #[derive(Debug, Parser)]
 pub struct TimeOpts {
     #[arg(short, long, value_parser = verify_timestamp)]
     pub timestamp: Time,
     // TODO: timezone
+}
+
+impl CmdExector for TimeOpts {
+    async fn execute(self) -> anyhow::Result<()> {
+        crate::process_time(self.timestamp)?;
+        Ok(())
+    }
 }
 
 #[derive(Clone, Copy, Debug)]
