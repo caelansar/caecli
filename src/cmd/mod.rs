@@ -2,6 +2,7 @@ mod base64;
 mod csv;
 mod gen_pass;
 mod http;
+mod jwt;
 mod text;
 mod time;
 
@@ -14,6 +15,7 @@ pub use self::{
     csv::{CsvOpts, OutputFormat},
     gen_pass::GenPassOpts,
     http::{HttpServeOpts, HttpSubCommand},
+    jwt::*,
     text::{KeyGenerateOpts, TextSignFormat, TextSignOpts, TextSubCommand, TextVerifyOpts},
     time::{Time, TimeOpts, TimeUnit},
 };
@@ -40,6 +42,8 @@ pub enum SubCommand {
     Time(TimeOpts),
     #[command(subcommand, about = "HTTP static server")]
     Http(HttpSubCommand),
+    #[command(subcommand, about = "JWT")]
+    Jwt(JwtSubCommand),
 }
 
 fn verify_input_file(filename: &str) -> Result<String, &'static str> {

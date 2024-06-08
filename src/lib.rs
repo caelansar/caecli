@@ -3,8 +3,8 @@ mod process;
 
 pub use cmd::{
     Base64DecodeOpts, Base64EncodeOpts, Base64SubCommand, CsvOpts, GenPassOpts, HttpServeOpts,
-    HttpSubCommand, KeyGenerateOpts, Opts, SubCommand, TextSignOpts, TextSubCommand,
-    TextVerifyOpts, TimeOpts,
+    HttpSubCommand, JwtSubCommand, KeyGenerateOpts, Opts, SignOpts, SubCommand, TextSignOpts,
+    TextSubCommand, TextVerifyOpts, TimeOpts, VerifyOpts,
 };
 use enum_dispatch::enum_dispatch;
 pub use process::*;
