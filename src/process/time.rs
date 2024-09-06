@@ -1,20 +1,21 @@
-use chrono::{Local, MappedLocalTime, TimeZone, Utc};
+use chrono::{Local, TimeZone, Utc};
+use chrono_tz::Tz;
 
 use crate::cmd::{Time, TimeUnit};
 
-pub fn process_time(time: Time) -> anyhow::Result<()> {
+pub fn process_time(time: Time, timezone: Option<Tz>) -> anyhow::Result<()> {
     let dt = match time.unit {
         TimeUnit::Seconds => Utc.timestamp_opt(time.timestamp as i64, 0),
         TimeUnit::Milliseconds => Utc.timestamp_millis_opt(time.timestamp as i64),
-    };
+    }
+    .single()
+    .ok_or_else(|| anyhow::anyhow!("invalid datetime"))?;
 
-    let dt = match dt {
-        MappedLocalTime::Single(dt) => dt,
-        _ => anyhow::bail!("invalid datetime"),
+    let formatted_dt = match timezone {
+        Some(tz) => dt.with_timezone(&tz).to_string(),
+        None => dt.with_timezone(&Local).to_string(),
     };
-
-    let dt = dt.with_timezone(&Local).to_string();
-    println!("{}", dt);
+    println!("{}", formatted_dt);
 
     Ok(())
 }
